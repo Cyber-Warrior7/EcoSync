@@ -1,66 +1,52 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import Hero from "../components/Hero";
+import Feed from "../components/Feed";
+import LostFoundFeed from "../components/LostFoundFeed";
+import { useAppData } from "../components/AppProvider";
+import Link from "next/link";
+
+export default function HomePage() {
+  const { posts, lostItems, loading, user } = useAppData();
+
+  if (loading || !user) {
+    return (
+      <div className="loading">
+        <p>{loading ? "Loading EcoSync..." : "Please log in to continue."}</p>
+        {!loading && (
+          <Link href="/login" className="btn primary" style={{ marginTop: 12 }}>
+            Go to login
+          </Link>
+        )}
+      </div>
+    );
+  }
+
+  const recentPosts = (posts || []).slice(0, 3);
+  const recentLost = (lostItems || []).slice(0, 3);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.js file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <Hero />
+      <section className="section">
+        <div className="section__header">
+          <h2>Recent cleanups</h2>
+          <Link href="/uploads" className="btn ghost">
+            See all uploads
+          </Link>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <Feed posts={recentPosts} />
+      </section>
+
+      <section className="section">
+        <div className="section__header">
+          <h2>Lost &amp; Found</h2>
+          <Link href="/lost-found" className="btn ghost">
+            Report / view items
+          </Link>
         </div>
-      </main>
-    </div>
+        <LostFoundFeed items={recentLost} />
+      </section>
+    </>
   );
 }
