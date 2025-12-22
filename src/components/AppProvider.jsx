@@ -54,9 +54,9 @@ export const AppProvider = ({ children }) => {
   }, [loadData, loadUser]);
 
   const refreshData = useCallback(async () => {
-    const u = user || (await loadUser());
+    const u = await loadUser();
     await loadData(u);
-  }, [user, loadUser, loadData]);
+  }, [loadUser, loadData]);
 
   return (
     <AppDataContext.Provider
