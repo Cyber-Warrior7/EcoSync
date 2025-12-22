@@ -8,6 +8,7 @@ import { clearUser } from "../lib/user";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [linksOpen, setLinksOpen] = useState(false);
   const { refreshData, user } = useAppData();
   const router = useRouter();
 
@@ -35,7 +36,10 @@ const Navbar = () => {
           <p className="nav__subtitle">Earn credits for good actions</p>
         </div>
       </div>
-      <div className="nav__links">
+      <button className="nav__burger" onClick={() => setLinksOpen((p) => !p)}>
+        ☰
+      </button>
+      <div className={`nav__links ${linksOpen ? "open" : ""}`}>
         <NavLink href="/">Home</NavLink>
         <NavLink href="/uploads">Uploads</NavLink>
         <NavLink href="/lost-found">Lost &amp; Found</NavLink>
