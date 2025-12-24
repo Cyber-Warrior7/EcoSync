@@ -16,11 +16,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     setOpen(false);
     clearUser();
-    try {
-      await refreshData();
-    } catch (err) {
-      console.error("Logout refresh failed", err);
-    }
     if (typeof window !== "undefined") {
       window.location.replace("/login");
     } else {
