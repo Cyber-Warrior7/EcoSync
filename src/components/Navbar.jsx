@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { NavLink } from "./NavLink";
 import { useAppData } from "./AppProvider";
@@ -11,6 +11,7 @@ const Navbar = () => {
   const [linksOpen, setLinksOpen] = useState(false);
   const { refreshData, user } = useAppData();
   const router = useRouter();
+  const dropdownRef = useRef(null);
 
   const handleLogout = async () => {
     setOpen(false);
@@ -26,6 +27,22 @@ const Navbar = () => {
       router.push("/login");
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   return (
     <header className="nav">
@@ -49,7 +66,7 @@ const Navbar = () => {
             Account
           </button>
           {open && (
-            <div className="nav__dropdown">
+            <div className="nav__dropdown" ref={dropdownRef}>
               <NavLink href="/profile" onClick={() => setOpen(false)}>
                 Profile
               </NavLink>
