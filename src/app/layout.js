@@ -1,6 +1,6 @@
 import "./globals.css";
-import Navbar from "../components/Navbar";
 import { AppProvider } from "../components/AppProvider";
+import ShellLayout from "../components/ShellLayout";
 
 export const metadata = {
   title: "EcoSync",
@@ -13,8 +13,7 @@ export default function RootLayout({ children }) {
       <body>
         <div className="shell">
           <AppProvider>
-            <Navbar />
-            {children}
+            <ShellLayout>{children}</ShellLayout>
           </AppProvider>
         </div>
       </body>
