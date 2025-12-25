@@ -64,7 +64,7 @@ export default function LoginPage() {
       <div className="card" style={{ maxWidth: 520, margin: "0 auto" }}>
         <h2 style={{ marginBottom: 4 }}>{mode === "login" ? "Login" : "Create account"}</h2>
         <p className="muted" style={{ marginTop: 0 }}>
-          Use Gmail or mes.ac.in. {/*Admin email: <strong>admin@ecosync.local</strong>*/}
+          Use Gmail or student.mes.ac.in. {/*Admin email: <strong>admin@ecosync.local</strong>*/}
         </p>
         <div className="cta-row" style={{ marginBottom: 12 }}>
           <button className={`btn ${mode === "login" ? "primary" : "ghost"}`} onClick={() => setMode("login")}>
@@ -81,7 +81,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@gmail.com or you@mes.ac.in"
+              placeholder="you@gmail.com or you@student.mes.ac.in"
               required
             />
           </label>
@@ -123,11 +123,6 @@ export default function LoginPage() {
           <p className="muted">Or continue with</p>
           <button className="btn ghost" type="button" disabled>
             Google (coming soon)
-          </button>
-        </div>
-        <div className="cta-row" style={{ marginTop: 12, gap: 8 }}>
-          <button className="btn ghost" type="button" onClick={handleSignOut}>
-            Sign out
           </button>
         </div>
       </div>
