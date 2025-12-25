@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { fetchLostItems, fetchPosts, getUserCredits, getUserSettings } from "../lib/api";
-import { getOrCreateUser } from "../lib/user";
+import { getOrCreateUser, saveUser } from "../lib/user";
 
 const AppDataContext = createContext(null);
 
@@ -20,18 +20,31 @@ export const AppProvider = ({ children }) => {
     return u;
   }, []);
 
-  const loadData = useCallback(async (u) => {
-    const [postsRes, lostRes, creditsRes, settingsRes] = await Promise.all([
-      fetchPosts(),
-      fetchLostItems(),
-      u ? getUserCredits(u.uid) : Promise.resolve({ credits: 0 }),
-      u ? getUserSettings(u.uid) : Promise.resolve({ username: "", theme: "dark" }),
-    ]);
-    setPosts(postsRes.items || []);
-    setLostItems(lostRes.items || []);
-    setCredits(creditsRes.credits || 0);
-    setSettings(settingsRes || { username: "", theme: "dark" });
-  }, []);
+  const loadData = useCallback(
+    async (u) => {
+      try {
+        const [postsRes, lostRes, creditsRes, settingsRes] = await Promise.all([
+          fetchPosts(),
+          fetchLostItems(),
+          u ? getUserCredits(u.uid) : Promise.resolve({ credits: 0 }),
+          u ? getUserSettings(u.uid) : Promise.resolve({ username: "", theme: "dark" }),
+        ]);
+        setPosts(postsRes.items || []);
+        setLostItems(lostRes.items || []);
+        setCredits(creditsRes.credits || 0);
+        setSettings(settingsRes || { username: "", theme: "dark" });
+        // keep username in local storage in sync
+        if (u && settingsRes?.username) {
+          const updatedUser = { ...u, username: settingsRes.username };
+          saveUser(updatedUser);
+          setUser(updatedUser);
+        }
+      } catch (err) {
+        console.error("Data load failed", err);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     let active = true;
