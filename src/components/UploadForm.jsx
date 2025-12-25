@@ -93,7 +93,13 @@ const UploadForm = ({ user, onCreated }) => {
           />
         </label>
         <div className="camera-preview">
-          <video ref={videoRef} autoPlay playsInline muted style={{ width: "100%", borderRadius: 12 }} />
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            style={{ width: "100%", borderRadius: 12, transform: "scaleX(-1)" }}
+          />
           <div className="cta-row">
             <button
               className="btn ghost"
