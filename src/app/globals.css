@@ -385,6 +385,14 @@ textarea:focus {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.camera-preview {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
 .muted {
   color: #9fb7b1;
   margin: 4px 0;

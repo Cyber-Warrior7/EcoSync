@@ -9,17 +9,9 @@ import Link from "next/link";
 export default function HomePage() {
   const { posts, lostItems, loading, user } = useAppData();
 
-  if (loading || !user) {
-    return (
-      <div className="loading">
-        <p>{loading ? "Loading EcoSync..." : "Please log in to continue."}</p>
-        {!loading && (
-          <Link href="/login" className="btn primary" style={{ marginTop: 12 }}>
-            Go to login
-          </Link>
-        )}
-      </div>
-    );
+  if (!user || loading) {
+    // ShellLayout will redirect unauthenticated users; avoid showing placeholder screen.
+    return null;
   }
 
   const recentPosts = (posts || []).slice(0, 3);
