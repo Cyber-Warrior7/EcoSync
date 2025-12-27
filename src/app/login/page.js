@@ -34,7 +34,15 @@ export default function LoginPage() {
       await refreshData();
       window.location.href = "/";
     } catch (err) {
-      setError(err.message || "Login failed");
+      const msg = err.message || "Login failed";
+      // If user not found, move to signup mode automatically
+      if (msg.toLowerCase().includes("not found")) {
+        setMode("signup");
+        setMessage("Account not found. Please create an account.");
+        setError("");
+      } else {
+        setError(msg);
+      }
     }
   };
 
