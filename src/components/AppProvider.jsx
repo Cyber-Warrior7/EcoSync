@@ -67,8 +67,15 @@ export const AppProvider = ({ children }) => {
   }, [loadData, loadUser]);
 
   const refreshData = useCallback(async () => {
-    const u = await loadUser();
-    await loadData(u);
+    setLoading(true);
+    try {
+      const u = await loadUser();
+      await loadData(u);
+    } catch (err) {
+      console.error("Refresh error", err);
+    } finally {
+      setLoading(false);
+    }
   }, [loadUser, loadData]);
 
   return (
