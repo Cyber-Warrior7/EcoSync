@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAppData } from "../../components/AppProvider";
-import { listUsers, fetchPosts, fetchLostItems, deletePost, approvePost, deleteLostItem } from "../../lib/api";
+import { listUsers, fetchPosts, fetchLostItems, deletePost, approvePost, rejectPost, deleteLostItem } from "../../lib/api";
 
 export default function AdminPage() {
   const { user, loading } = useAppData();
@@ -122,6 +122,7 @@ export default function AdminPage() {
               <p className="card__title" style={{ marginTop: 4 }}>{p.caption}</p>
               <p className="muted">User: {p.user_email || p.user_id}</p>
               <p className="muted">Status: {p.status}</p>
+              {p.review_notes && <p className="muted">Notes: {p.review_notes}</p>}
               <div className="cta-row" style={{ marginTop: 8, gap: 8 }}>
                 {p.status === "pending" && (
                   <button
@@ -142,6 +143,22 @@ export default function AdminPage() {
                     Approve
                   </button>
                 )}
+                <button
+                  className="btn ghost"
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      const reason = prompt("Reason for rejection?", "Rejected by admin");
+                      await rejectPost(p.id, reason || "");
+                      setMessage("Post rejected");
+                      await loadAll();
+                    } catch (err) {
+                      setError(err.message || "Reject failed");
+                    }
+                  }}
+                >
+                  Reject
+                </button>
                 <button
                   className="btn ghost"
                   type="button"

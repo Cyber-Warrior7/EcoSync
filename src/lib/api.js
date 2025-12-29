@@ -116,6 +116,16 @@ export const approvePost = async (postId, credits = 10, review_notes = "") => {
   return handleResponse(res);
 };
 
+export const rejectPost = async (postId, reason = "") => {
+  const params = new URLSearchParams();
+  if (reason) params.append("reason", reason);
+  const res = await fetch(`${API_BASE}/posts/${postId}/reject?${params.toString()}`, {
+    method: "POST",
+    headers: { ...authHeaders() },
+  });
+  return handleResponse(res);
+};
+
 export const deleteLostItem = async (itemId) => {
   const res = await fetch(`${API_BASE}/lost-found/${itemId}`, {
     method: "DELETE",
